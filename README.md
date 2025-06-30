@@ -162,9 +162,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-Created by [Your Name] - feel free to contact me!
+Created by Jim Christian - feel free to contact me!
 
-Project Link: [https://github.com/aplaceforallmystuff/iss-live-tracker](https://github.com/aplaceforallmystuff/iss-live-tracker)
+Project Link: [https://github.com/aplaceforallmystuff/ISS-Tracker](https://github.com/aplaceforallmystuff/ISS-Tracker)
 
 ---
 
