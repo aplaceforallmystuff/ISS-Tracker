@@ -2,6 +2,9 @@
 
 A real-time International Space Station (ISS) tracker with live Earth views from space. Track the ISS position, watch live footage from onboard cameras, and find out when you can see it from your location.
 
+## About
+This is a fun vibe-coded project with Claude Opus 4. After stargazing with my kids one night, I wanted them to be able to see where the ISS was as well as a live video feed on one device without having a satellite tracking app in one hand and a device with YouTube in the other.
+
 ![ISS Live Tracker Preview](https://img.shields.io/badge/Live-Demo-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![HTML5](https://img.shields.io/badge/HTML5-E34C26?logo=html5&logoColor=white)
@@ -13,7 +16,8 @@ A real-time International Space Station (ISS) tracker with live Earth views from
 ### Real-Time Tracking
 - **Live ISS Position** - Updates every 2 seconds with current coordinates
 - **Orbital Trajectory** - Visual path showing where the ISS has been and where it's going
-- **Flight Statistics** - Current altitude, velocity, and orbital information
+- **Flight Statistics** - Current altitude, velocity, orbits completed today (since local midnight), and sunlight status (daylight/eclipse)
+- **Sunlight Indicator** - Shows if the ISS is currently in daylight or eclipse
 - **Auto-Follow Mode** - Keep the ISS centred on screen as it moves
 
 ### Live Video Stream
@@ -28,7 +32,7 @@ A real-time International Space Station (ISS) tracker with live Earth views from
 - **Detailed Information** - Duration, maximum elevation, and direction
 
 ### Modern UI/UX
-- **Dark Theme** - Optimised for comfortable viewing
+- **Dark & Light Modes** - Toggle between dark and light themes
 - **Responsive Design** - Works on desktop, tablet, and mobile
 - **Smooth Animations** - Professional transitions and effects
 - **Keyboard Shortcuts** - Quick access to key features
@@ -90,6 +94,7 @@ npx http-server
 - **📍 Follow ISS** - Auto-centre map on ISS position
 - **⛶ Fullscreen** - Enter immersive fullscreen mode
 - **📤 Share** - Share the app on social media
+- **☀️ Light/Dark Mode** - Toggle between light and dark themes
 
 ### Keyboard Shortcuts
 - `F` - Toggle follow mode
@@ -119,7 +124,7 @@ npx http-server
 
 - **ISS Position**: Real-time telemetry from WhereTheISS.at
 - **Live Video**: NASA's official YouTube channel
-- **Map Tiles**: CartoDB Dark Matter via OpenStreetMap
+- **Map Tiles**: CartoDB Dark Matter (dark mode) and Positron (light mode) via OpenStreetMap
 - **Geocoding**: Nominatim OpenStreetMap
 
 ## 🤝 Contributing

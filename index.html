@@ -28,6 +28,44 @@
             --text-primary: #ffffff;
             --text-secondary: #b0b0b0;
         }
+        /* Light mode overrides */
+    html[data-theme="light"] {
+        --bg-dark: #ffffff;
+        --bg-medium: #f2f2f2;
+        --text-primary: #000000;
+        --text-secondary: #555555;
+        /* Override accent colors for light mode */
+        --primary-color: #0044cc;
+        --secondary-color: #cc0044;
+    }
+    /* Light mode UI overrides */
+    html[data-theme="light"] .header {
+        background: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    html[data-theme="light"] .control-btn {
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: var(--text-primary);
+    }
+    html[data-theme="light"] .control-btn:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+    html[data-theme="light"] .info-card {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    html[data-theme="light"] .info-card h3 {
+        color: var(--primary-color);
+    }
+    html[data-theme="light"] .info-card .info-value,
+    html[data-theme="light"] .info-card .info-label {
+        color: var(--text-primary);
+    }
+    html[data-theme="light"] .side-panel {
+        background: rgba(255, 255, 255, 0.95);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -182,7 +220,7 @@
         /* Info Cards */
         .info-cards {
             position: absolute;
-            top: 20px;
+            top: 120px;
             right: 20px;
             display: flex;
             flex-direction: column;
@@ -441,7 +479,7 @@
             }
             
             .info-cards {
-                top: 10px;
+                top: 110px;
                 right: 10px;
             }
             
@@ -559,6 +597,9 @@
                 <button class="control-btn" onclick="shareApp()">
                     <span>📤</span> <span>Share</span>
                 </button>
+                <button class="control-btn" id="themeToggleBtn" onclick="toggleTheme()">
+                    <span>☀️</span> <span>Light Mode</span>
+                </button>
             </div>
         </header>
 
@@ -629,7 +670,7 @@
                     <span class="stat-value" id="distanceTraveled">--</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-label">Time in Daylight</span>
+                    <span class="stat-label">Currently in Daylight?</span>
                     <span class="stat-value" id="daylightTime">--</span>
                 </div>
             </div>
@@ -680,10 +721,41 @@
         let totalDistance = 0;
         let lastUpdateTime = Date.now();
         let orbitsToday = 0;
-        let startTime = Date.now();
+        // Timestamp for start of current calendar day (local)
+        let startTime = new Date().setHours(0, 0, 0, 0);
         let userLocation = null;
         let userLocationMarker = null;
         let currentISSData = null;
+        let baseLayer;
+        // Orbit line colors for themes
+        const orbitColors = {
+            dark: { past: '#00ff88', future: '#ffcc00' },
+            light: { past: '#006644', future: '#aa8800' }
+        };
+
+        // Returns the appropriate tile URL based on current theme
+        function getTileLayerUrl() {
+            const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            return theme === 'light'
+                ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+        }
+
+        // Updates the base tile layer URL when theme changes
+        function updateBaseLayer() {
+            if (baseLayer) {
+                baseLayer.setUrl(getTileLayerUrl());
+            }
+        }
+        // Update orbit polyline colors to match theme
+        function updateOrbitColors(theme) {
+            if (currentOrbitLine) {
+                currentOrbitLine.setStyle({ color: orbitColors[theme].past });
+            }
+            if (futureOrbitLine) {
+                futureOrbitLine.setStyle({ color: orbitColors[theme].future });
+            }
+        }
 
         // Initialize app
         window.addEventListener('load', () => {
@@ -709,8 +781,8 @@
                 position: 'topright'
             }).addTo(map);
 
-            // Dark theme tiles
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            // Base map tiles
+            baseLayer = L.tileLayer(getTileLayerUrl(), {
                 attribution: '© OpenStreetMap contributors © CARTO',
                 maxZoom: 19
             }).addTo(map);
@@ -776,8 +848,10 @@
                 if (currentOrbitLine) {
                     currentOrbitLine.setLatLngs(currentOrbitPoints);
                 } else {
+                    // Create past trajectory line with theme-specific color
+                    const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
                     currentOrbitLine = L.polyline(currentOrbitPoints, {
-                        color: '#00ff88',
+                        color: orbitColors[theme].past,
                         weight: 3,
                         opacity: 0.8,
                         smoothFactor: 1
@@ -789,8 +863,10 @@
                 if (futureOrbitLine) {
                     futureOrbitLine.setLatLngs([[lat, lng], ...futurePoints]);
                 } else {
+                    // Create future trajectory line with theme-specific color
+                    const themeF = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
                     futureOrbitLine = L.polyline([[lat, lng], ...futurePoints], {
-                        color: '#ffcc00',
+                        color: orbitColors[themeF].future,
                         weight: 2,
                         opacity: 0.5,
                         dashArray: '5, 10',
@@ -1062,6 +1138,50 @@ statusEl.textContent = 'Geolocation not supported';
             searchLocation();
         }
     });
+    // Theme functions
+    function setTheme(theme) {
+        const htmlEl = document.documentElement;
+        if (theme === 'light') {
+            htmlEl.setAttribute('data-theme', 'light');
+        } else {
+            htmlEl.removeAttribute('data-theme');
+        }
+        localStorage.setItem('theme', theme);
+        updateThemeButton(theme);
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', theme === 'light' ? '#ffffff' : '#000000');
+        }
+        // Switch base layer tiles to match theme
+        updateBaseLayer();
+        // Adjust ISS trajectory colors for new theme
+        updateOrbitColors(theme);
+    }
+
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        setTheme(current === 'light' ? 'dark' : 'light');
+    }
+
+    function updateThemeButton(theme) {
+        const btn = document.getElementById('themeToggleBtn');
+        if (!btn) return;
+        const iconSpan = btn.querySelector('span:first-child');
+        const textSpan = btn.querySelector('span:last-child');
+        if (theme === 'light') {
+            iconSpan.textContent = '🌙';
+            textSpan.textContent = 'Dark Mode';
+        } else {
+            iconSpan.textContent = '☀️';
+            textSpan.textContent = 'Light Mode';
+        }
+    }
+
+    // Initialize theme on load
+    (function() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+    })();
 </script>
 </body>
 </html>
