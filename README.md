@@ -14,15 +14,14 @@ This is a fun vibe-coded project with Claude Opus 4. After stargazing with my ki
 ## 🌟 Features
 
 ### Real-Time Tracking
-- **Live ISS Position** - Updates every 2 seconds with current coordinates
+- **Live ISS Position** - Updates every 2 seconds with current coordinates, displayed in the stats panel
 - **Orbital Trajectory** - Visual path showing where the ISS has been and where it's going
-- **Flight Statistics** - Current altitude, velocity, orbits completed today (since local midnight), and sunlight status (daylight/eclipse)
+- **Flight Statistics** - Current altitude and velocity, displayed in the stats panel
 - **Sunlight Indicator** - Shows if the ISS is currently in daylight or eclipse
 - **Auto-Follow Mode** - Keep the ISS centred on screen as it moves
 
 ### Live Video Stream
-- **NASA Live Feed** - Direct stream from ISS cameras showing Earth views
-- **Split Screen Interface** - Map view above, live video below
+- **NASA Live Feed** - Direct stream from ISS cameras showing Earth views (single source)
 - **Full HD Support** - Watch Earth from space in high definition
 
 ### Pass Predictions
@@ -90,11 +89,11 @@ npx http-server
 ## 🎮 Controls
 
 ### Buttons
-- **📊 Stats** - Toggle statistics panel with mission data
-- **📍 Follow ISS** - Auto-centre map on ISS position
-- **⛶ Fullscreen** - Enter immersive fullscreen mode
-- **📤 Share** - Share the app on social media
-- **☀️ Light/Dark Mode** - Toggle between light and dark themes
+- **Stats** - Toggle statistics panel with mission data
+- **Follow ISS** - Auto-centre map on ISS position
+- **Fullscreen** - Enter immersive fullscreen mode
+- **Share** - Share the app on social media
+- **Light/Dark Mode** - Toggle between light and dark themes
 
 ### Keyboard Shortcuts
 - `F` - Toggle follow mode
@@ -105,14 +104,13 @@ npx http-server
 
 ### APIs Used
 - **WhereTheISS.at API** - Real-time ISS position data
-- **OpenStreetMap Nominatim** - Geocoding for location search
 - **YouTube Embed API** - NASA live stream integration
 
 ### Technologies
 - **Leaflet.js** - Interactive mapping library
 - **HTML5 Geolocation** - GPS/location detection
-- **CSS3 Animations** - Smooth UI transitions
 - **Vanilla JavaScript** - No framework dependencies
+- **External CSS/JS** - Styles and scripts are now in separate files (`style.css`, `script.js`)
 
 ### Browser Support
 - Chrome/Edge 88+
@@ -125,7 +123,6 @@ npx http-server
 - **ISS Position**: Real-time telemetry from WhereTheISS.at
 - **Live Video**: NASA's official YouTube channel
 - **Map Tiles**: CartoDB Dark Matter (dark mode) and Positron (light mode) via OpenStreetMap
-- **Geocoding**: Nominatim OpenStreetMap
 
 ## 🤝 Contributing
 
@@ -150,7 +147,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🐛 Known Issues
 
-- Pass predictions are simplified approximations (not using full SGP4/SDP4 orbital mechanics)
 - YouTube embed may require unmuting on some browsers due to autoplay policies
 - Location search requires internet connection for geocoding
 

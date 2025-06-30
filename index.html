@@ -474,7 +474,7 @@
                 font-size: 12px;
             }
             
-            .control-btn span {
+            .control-btn .btn-text {
                 display: none;
             }
             
@@ -586,19 +586,19 @@
             
             <div class="controls">
                 <button class="control-btn" onclick="togglePanel()">
-                    <span>📊</span> <span>Stats</span>
+                    <span>📊</span><span class="btn-text">Stats</span>
                 </button>
                 <button class="control-btn" onclick="toggleFollow()" id="followBtn">
-                    <span>📍</span> <span>Follow ISS</span>
+                    <span>📍</span><span class="btn-text">Follow ISS</span>
                 </button>
                 <button class="control-btn" onclick="toggleFullscreen()">
-                    <span>⛶</span> <span>Fullscreen</span>
+                    <span>⛶</span><span class="btn-text">Fullscreen</span>
                 </button>
                 <button class="control-btn" onclick="shareApp()">
-                    <span>📤</span> <span>Share</span>
+                    <span>📤</span><span class="btn-text">Share</span>
                 </button>
                 <button class="control-btn" id="themeToggleBtn" onclick="toggleTheme()">
-                    <span>☀️</span> <span>Light Mode</span>
+                    <span>☀️</span><span class="btn-text">Light Mode</span>
                 </button>
             </div>
         </header>
@@ -609,34 +609,7 @@
             <div class="map-section">
                 <div id="map"></div>
                 
-                <div class="info-cards">
-                    <div class="info-card">
-                        <h3>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 2v10l6 6"/>
-                            </svg>
-                            Current Position
-                        </h3>
-                        <div class="info-value" id="latitude">--</div>
-                        <div class="info-label">Latitude</div>
-                        <div class="info-value" id="longitude">--</div>
-                        <div class="info-label">Longitude</div>
-                    </div>
-                    
-                    <div class="info-card">
-                        <h3>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                            </svg>
-                            Flight Data
-                        </h3>
-                        <div class="info-value" id="altitude">--</div>
-                        <div class="info-label">Altitude (km)</div>
-                        <div class="info-value" id="velocity">--</div>
-                        <div class="info-label">Velocity (km/h)</div>
-                    </div>
-                </div>
+                
             </div>
             
             <!-- Stream Section -->
@@ -676,6 +649,30 @@
             </div>
             
             <div class="panel-section">
+                <h3>Current Position:</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Latitude</span>
+                    <span class="stat-value" id="latitude">--</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Longitude</span>
+                    <span class="stat-value" id="longitude">--</span>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h3>Flight Data:</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Altitude (km)</span>
+                    <span class="stat-value" id="altitude">--</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Velocity (km/h)</span>
+                    <span class="stat-value" id="velocity">--</span>
+                </div>
+            </div>
+            
+            <div class="panel-section">
                 <h3>Next Passes Over Your Location</h3>
                 <div class="location-input">
                     <input type="text" id="locationInput" placeholder="Enter city or address...">
@@ -692,6 +689,8 @@
                     The International Space Station orbits Earth every 90 minutes at an average altitude of 408 km, traveling at 27,600 km/h.
                 </p>
             </div>
+
+            
         </div>
     </div>
 
