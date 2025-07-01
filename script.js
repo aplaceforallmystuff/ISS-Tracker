@@ -162,8 +162,8 @@
                 }
                 
                 // Update UI
-                document.getElementById('latitude').textContent = lat.toFixed(4);
-                document.getElementById('longitude').textContent = lng.toFixed(4);
+                document.getElementById('latitude').textContent = lat.toFixed(4) + '°';
+                document.getElementById('longitude').textContent = lng.toFixed(4) + '°';
                 document.getElementById('altitude').textContent = altitude.toFixed(2);
                 document.getElementById('velocity').textContent = velocity.toFixed(2);
                 
@@ -469,3 +469,11 @@ statusEl.textContent = 'Geolocation not supported';
         const savedTheme = localStorage.getItem('theme') || 'dark';
         setTheme(savedTheme);
     })();
+
+    // Function to change the video stream
+    function changeStream(streamUrl) {
+        const iframe = document.querySelector('.stream-container iframe');
+        if (iframe) {
+            iframe.src = streamUrl;
+        }
+    }
