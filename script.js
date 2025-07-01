@@ -76,13 +76,10 @@
 
             // Custom ISS icon
             const issIcon = L.divIcon({
-                html: `<svg width="40" height="40" viewBox="0 0 24 24" fill="#ffcc00" stroke="white" stroke-width="2">
-                    <circle cx="12" cy="12" r="4"/>
-                    <path d="M12 1v6m0 6v6m-6-6h6m6 0h6"/>
-                </svg>`,
+                html: '<div style="font-size: 30px;">🛰️</div>',
                 className: 'iss-icon',
-                iconSize: [40, 40],
-                iconAnchor: [20, 20]
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
             });
 
             issMarker = L.marker([0, 0], { icon: issIcon }).addTo(map);
