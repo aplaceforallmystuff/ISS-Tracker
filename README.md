@@ -157,7 +157,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Include amateur radio frequencies for ISS communication
 - [ ] Add notifications for upcoming visible passes
 - [ ] Support for tracking other satellites
-- [ ] 3D globe view option
+
 - [ ] Historical pass data and statistics
 - [ ] Weather overlay for viewing conditions
 
