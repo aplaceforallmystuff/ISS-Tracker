@@ -1,5 +1,3 @@
-
-
 // Global variables
         let map;
         let issMarker;
@@ -16,6 +14,8 @@
         let userLocationMarker = null;
         let currentISSData = null;
         let baseLayer;
+        let currentView = 'map'; // 'map' or 'globe'
+        
         // Orbit line colors for themes
         const orbitColors = {
             dark: { past: '#00ff88', future: '#ffcc00' },
@@ -50,14 +50,15 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 initializeMap();
-                
                 startTracking();
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('app').classList.add('loaded');
             }, 1500);
         });
 
-        
+        window.addEventListener('resize', () => {
+            // No 3D globe to resize
+        });
 
         // Initialize map
         function initializeMap() {
@@ -124,72 +125,82 @@
                 // Update marker
                 issMarker.setLatLng([lat, lng]);
 
-                // Follow ISS if enabled
-                if (followISS) {
-                    map.panTo([lat, lng]);
-                }
-                
-                // Update trajectory
-                currentOrbitPoints.push([lat, lng]);
-                if (currentOrbitPoints.length > 300) {
-                    currentOrbitPoints.shift();
-                }
-                
-                // Draw past trajectory
-                if (currentOrbitLine) {
-                    currentOrbitLine.setLatLngs(currentOrbitPoints);
-                }
-                else {
-                    // Create past trajectory line with theme-specific color
-                    const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-                    currentOrbitLine = L.polyline(currentOrbitPoints, {
-                        color: orbitColors[theme].past,
-                        weight: 3,
-                        opacity: 0.8,
-                        smoothFactor: 1
-                    }).addTo(map);
-                }
-                
-                // Draw future trajectory
-                const futurePoints = calculateFutureOrbit(lat, lng);
-                if (futureOrbitLine) {
-                    futureOrbitLine.setLatLngs([[lat, lng], ...futurePoints]);
-                } else {
-                    // Create future trajectory line with theme-specific color
-                    const themeF = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-                    futureOrbitLine = L.polyline([[lat, lng], ...futurePoints], {
-                        color: orbitColors[themeF].future,
-                        weight: 2,
-                        opacity: 0.5,
-                        dashArray: '5, 10',
-                        smoothFactor: 1
-                    }).addTo(map);
-                }
-
-                
+                updateMapDisplay(lat, lng, altitude, velocity);
                 
                 // Update UI
-                document.getElementById('latitude').textContent = lat.toFixed(4) + '°';
-                document.getElementById('longitude').textContent = lng.toFixed(4) + '°';
-                document.getElementById('altitude').textContent = altitude.toFixed(2);
-                document.getElementById('velocity').textContent = velocity.toFixed(2);
-                
-                // Update statistics
-                updateStatistics(velocity);
-                
-                // Check if ISS is in daylight
-                const isDaylight = data.visibility === 'daylight';
-                document.getElementById('daylightTime').textContent = isDaylight ? 'Yes ☀️' : 'No 🌙';
-                
-                // Update pass predictions if user location is set
-                if (userLocation) {
-                    updatePassPredictions();
-                }
+                updateUIDisplay(lat, lng, altitude, velocity, data.visibility);
                 
             } catch (error) {
                 console.error('Error fetching ISS position:', error);
             }
         }
+
+        function updateUIDisplay(lat, lng, altitude, velocity, visibility) {
+            document.getElementById('latitude').textContent = lat.toFixed(4) + '°';
+            document.getElementById('longitude').textContent = lng.toFixed(4) + '°';
+            document.getElementById('altitude').textContent = altitude.toFixed(2);
+            document.getElementById('velocity').textContent = velocity.toFixed(2);
+            
+            // Update statistics
+            updateStatistics(velocity);
+            
+            // Check if ISS is in daylight
+            const isDaylight = visibility === 'daylight';
+            document.getElementById('daylightTime').textContent = isDaylight ? 'Yes ☀️' : 'No 🌙';
+            
+            // Update pass predictions if user location is set
+            if (userLocation) {
+                updatePassPredictions();
+            }
+        }
+
+        // Update statistics
+
+        function updateMapDisplay(lat, lng, altitude, velocity) {
+            // Follow ISS if enabled
+            if (followISS) {
+                map.panTo([lat, lng]);
+            }
+            
+            // Update trajectory
+            currentOrbitPoints.push([lat, lng]);
+            if (currentOrbitPoints.length > 300) {
+                currentOrbitPoints.shift();
+            }
+            
+            // Draw past trajectory
+            if (currentOrbitLine) {
+                currentOrbitLine.setLatLngs(currentOrbitPoints);
+            }
+            else {
+                // Create past trajectory line with theme-specific color
+                const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                currentOrbitLine = L.polyline(currentOrbitPoints, {
+                    color: orbitColors[theme].past,
+                    weight: 3,
+                    opacity: 0.8,
+                    smoothFactor: 1
+                }).addTo(map);
+            }
+            
+            // Draw future trajectory
+            const futurePoints = calculateFutureOrbit(lat, lng);
+            if (futureOrbitLine) {
+                futureOrbitLine.setLatLngs([[lat, lng], ...futurePoints]);
+            } else {
+                // Create future trajectory line with theme-specific color
+                const themeF = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                futureOrbitLine = L.polyline([[lat, lng], ...futurePoints], {
+                    color: orbitColors[themeF].future,
+                    weight: 2,
+                    opacity: 0.5,
+                    dashArray: '5, 10',
+                    smoothFactor: 1
+                }).addTo(map);
+            }
+        }
+
+        
 
         // Update statistics
         function updateStatistics(velocity) {
@@ -224,15 +235,17 @@
                         const lng = position.coords.longitude;
                         setUserLocation(lat, lng, 'Your Location');
                         statusEl.textContent = `Location set: ${lat.toFixed(2)}°, ${lng.toFixed(2)}°`;
-},
-(error) => {
-statusEl.textContent = 'Error: ' + error.message;
-}
-);
-} else {
-statusEl.textContent = 'Geolocation not supported';
-}
-}// Search location using Nominatim
+                    },
+                    (error) => {
+                        statusEl.textContent = 'Error: ' + error.message;
+                    }
+                );
+            } else {
+                statusEl.textContent = 'Geolocation not supported';
+            }
+        }
+
+        // Search location using Nominatim
     async function searchLocation() {
         const query = document.getElementById('locationInput').value;
         const statusEl = document.getElementById('locationStatus');
@@ -486,4 +499,9 @@ statusEl.textContent = 'Geolocation not supported';
         }
     }
 
-    
+    function toggleView() {
+        // No 3D view, so this button will do nothing or be hidden
+        console.log("Toggle view button clicked, but 3D view is disabled.");
+    }
+
+    window.toggleView = toggleView; // Make toggleView globally accessible
