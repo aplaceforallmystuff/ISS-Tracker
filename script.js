@@ -1,3 +1,5 @@
+
+
 // Global variables
         let map;
         let issMarker;
@@ -48,11 +50,14 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 initializeMap();
+                
                 startTracking();
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('app').classList.add('loaded');
             }, 1500);
         });
+
+        
 
         // Initialize map
         function initializeMap() {
@@ -85,6 +90,8 @@
             issMarker = L.marker([0, 0], { icon: issIcon }).addTo(map);
         }
 
+        
+
         // Calculate future orbit
         function calculateFutureOrbit(lat, lng, numPoints = 90) {
             const points = [];
@@ -116,7 +123,7 @@
                 
                 // Update marker
                 issMarker.setLatLng([lat, lng]);
-                
+
                 // Follow ISS if enabled
                 if (followISS) {
                     map.panTo([lat, lng]);
@@ -131,7 +138,8 @@
                 // Draw past trajectory
                 if (currentOrbitLine) {
                     currentOrbitLine.setLatLngs(currentOrbitPoints);
-                } else {
+                }
+                else {
                     // Create past trajectory line with theme-specific color
                     const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
                     currentOrbitLine = L.polyline(currentOrbitPoints, {
@@ -157,6 +165,8 @@
                         smoothFactor: 1
                     }).addTo(map);
                 }
+
+                
                 
                 // Update UI
                 document.getElementById('latitude').textContent = lat.toFixed(4) + '°';
@@ -427,7 +437,8 @@ statusEl.textContent = 'Geolocation not supported';
         const htmlEl = document.documentElement;
         if (theme === 'light') {
             htmlEl.setAttribute('data-theme', 'light');
-        } else {
+        }
+        else {
             htmlEl.removeAttribute('data-theme');
         }
         localStorage.setItem('theme', theme);
@@ -474,3 +485,5 @@ statusEl.textContent = 'Geolocation not supported';
             iframe.src = streamUrl;
         }
     }
+
+    

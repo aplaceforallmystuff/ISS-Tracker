@@ -1,0 +1,22 @@
+{
+  "name": "ISS Live Tracker",
+  "short_name": "ISS Live",
+  "description": "Track the International Space Station in real-time",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "images/location_tracking.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/location_tracking.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

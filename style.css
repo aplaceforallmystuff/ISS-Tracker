@@ -217,6 +217,18 @@
             width: 100%;
         }
 
+        .globe-section {
+            flex: 1;
+            position: relative;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        #globeViz {
+            width: 100%;
+            height: 100%;
+        }
+
         /* Stream Section */
                 .stream-section {
             flex: 1;
